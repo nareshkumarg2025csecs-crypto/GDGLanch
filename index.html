@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDG on Campus REC · Official Website Launch</title>
+  <meta name="description" content="Official website launch ceremony for Google Developer Groups on Campus, Rajalakshmi Engineering College. Redirecting to https://www.gdgrec.dev/">
+  
+  <!-- Favicon: Inline Data URI SVG of the GDG Brackets Logo -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cline x1='194' y1='170' x2='42' y2='256' stroke='%23EA4335' stroke-width='52' stroke-linecap='round'/%3E%3Cline x1='42' y1='256' x2='194' y2='342' stroke='%234285F4' stroke-width='52' stroke-linecap='round'/%3E%3Cline x1='318' y1='342' x2='470' y2='256' stroke='%23FBBC04' stroke-width='52' stroke-linecap='round'/%3E%3Cline x1='318' y1='170' x2='470' y2='256' stroke='%230F9D58' stroke-width='52' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Google Fonts: Press Start 2P & VT323 with Monospace Fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & COLOR PALETTE
+       Strictly adhering to Google colors (#4285F4, #EA4335, #FBBC04, #0F9D58)
+       Dark Theme: bg #0b0d12, surface #14171f, text #e8eaed, muted #9aa0a6
+       ========================================================================== */
+    :root {
+      --bg-color: #0b0d12;
+      --surface: #14171f;
+      --surface-border: #232836;
+      --text-main: #e8eaed;
+      --text-muted: #9aa0a6;
+      --google-blue: #4285F4;
+      --google-red: #EA4335;
+      --google-yellow: #FBBC04;
+      --google-green: #0F9D58;
+      
+      --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+      --font-term: 'VT323', 'Courier New', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-term);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Fixed Fullscreen CursorGrid Behind UI (z-index: 0) */
+    #grid-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #grid-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* CRT Scanlines and Vignette Overlay (z-index: 2) */
+    .crt-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%),
+        radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.75) 100%);
+      background-size: 100% 4px, 100% 100%;
+    }
+
+    /* Confetti Canvas (z-index: 4) */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Screen Flash Wipe (z-index: 10) */
+    #flash-wipe {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #flash-wipe.active {
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       MAIN RETRO DESKTOP LAYOUT (z-index: 3)
+       ========================================================================== */
+    .viewport-center {
+      position: relative;
+      z-index: 3;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* Retro Window Frame */
+    .retro-window {
+      width: 100%;
+      max-width: 660px;
+      background: var(--surface);
+      border: 3px solid var(--surface-border);
+      border-radius: 4px;
+      box-shadow: 
+        0 0 0 1px #050608,
+        0 0 0 3px #2d3345,
+        0 25px 60px rgba(0, 0, 0, 0.85),
+        0 0 45px rgba(66, 133, 244, 0.12),
+        inset 1px 1px 0 rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0 rgba(0, 0, 0, 0.6);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      animation: windowAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes windowAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Title Bar */
+    .title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: linear-gradient(90deg, #181d28 0%, #1c2230 100%);
+      border-bottom: 2px solid var(--surface-border);
+      font-family: var(--font-pixel);
+      font-size: 11px;
+      color: var(--text-main);
+      letter-spacing: 0.05em;
+    }
+
+    .title-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-bar-icon {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      background: var(--google-blue);
+      box-shadow: 0 0 6px var(--google-blue);
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .control-box {
+      width: 12px;
+      height: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3), inset -1px -1px 0 rgba(0, 0, 0, 0.5);
+    }
+    .ctrl-blue   { background-color: var(--google-blue); }
+    .ctrl-yellow { background-color: var(--google-yellow); }
+    .ctrl-red    { background-color: var(--google-red); }
+
+    /* Window Body */
+    .window-body {
+      padding: 28px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* GDG Brackets Logo */
+    .logo-container {
+      width: 130px;
+      height: 72px;
+      margin-bottom: 18px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: floatLogo 4s ease-in-out infinite;
+    }
+
+    @keyframes floatLogo {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    .logo-svg {
+      width: 100%;
+      height: 100%;
+      filter: 
+        drop-shadow(0 0 16px rgba(66, 133, 244, 0.45))
+        drop-shadow(0 0 20px rgba(234, 67, 53, 0.35))
+        drop-shadow(0 0 24px rgba(15, 157, 88, 0.3));
+      transition: filter 0.3s ease;
+    }
+
+    .logo-container:hover .logo-svg {
+      filter: 
+        drop-shadow(0 0 24px rgba(66, 133, 244, 0.8))
+        drop-shadow(0 0 28px rgba(234, 67, 53, 0.7))
+        drop-shadow(0 0 32px rgba(15, 157, 88, 0.7));
+    }
+
+    /* Headings */
+    .main-title {
+      font-family: var(--font-pixel);
+      font-size: 20px;
+      line-height: 1.35;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      text-shadow: 0 0 12px rgba(66, 133, 244, 0.4);
+    }
+
+    .subtitle-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .subtitle {
+      font-family: var(--font-pixel);
+      font-size: 11px;
+      color: var(--google-yellow);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(251, 188, 4, 0.4);
+    }
+
+    .campus-badge {
+      font-family: var(--font-term);
+      font-size: 18px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* Terminal Prompt Line */
+    .terminal-box {
+      width: 100%;
+      max-width: 480px;
+      background: #0a0d14;
+      border: 1px solid #1f2533;
+      border-radius: 4px;
+      padding: 9px 14px;
+      margin-bottom: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    .terminal-text {
+      font-family: var(--font-term);
+      font-size: 22px;
+      color: #34d399; /* retro emerald phosphor */
+      letter-spacing: 0.06em;
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+    }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.1em;
+      background: #34d399;
+      margin-left: 4px;
+      animation: cursorBlink 0.9s infinite step-start;
+      vertical-align: middle;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ==========================================================================
+       ARCADE LAUNCH BUTTON
+       Chunky pixel button cycling through the 4 Google colors
+       ========================================================================== */
+    .btn-container {
+      position: relative;
+      margin-bottom: 22px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .launch-btn {
+      position: relative;
+      display: inline-block;
+      background: #14171f;
+      font-family: var(--font-pixel);
+      font-size: 20px;
+      letter-spacing: 0.14em;
+      padding: 18px 46px;
+      border: 3px solid var(--google-blue);
+      border-radius: 6px;
+      cursor: pointer;
+      outline: none;
+      animation: pulseArcadeGlow 4s infinite linear;
+      transition: transform 0.08s ease, filter 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 4-color pulsating cycle */
+    @keyframes pulseArcadeGlow {
+      0%, 100% {
+        border-color: var(--google-blue);
+        color: var(--google-blue);
+        box-shadow: 
+          0 5px 0 #0d1a33,
+          0 7px 0 #000000,
+          0 0 28px rgba(66, 133, 244, 0.65),
+          inset 0 0 14px rgba(66, 133, 244, 0.25);
+      }
+      25% {
+        border-color: var(--google-red);
+        color: var(--google-red);
+        box-shadow: 
+          0 5px 0 #2a0e0b,
+          0 7px 0 #000000,
+          0 0 28px rgba(234, 67, 53, 0.65),
+          inset 0 0 14px rgba(234, 67, 53, 0.25);
+      }
+      50% {
+        border-color: var(--google-yellow);
+        color: var(--google-yellow);
+        box-shadow: 
+          0 5px 0 #2b2105,
+          0 7px 0 #000000,
+          0 0 28px rgba(251, 188, 4, 0.65),
+          inset 0 0 14px rgba(251, 188, 4, 0.25);
+      }
+      75% {
+        border-color: var(--google-green);
+        color: var(--google-green);
+        box-shadow: 
+          0 5px 0 #072213,
+          0 7px 0 #000000,
+          0 0 28px rgba(15, 157, 88, 0.65),
+          inset 0 0 14px rgba(15, 157, 88, 0.25);
+      }
+    }
+
+    .launch-btn:hover {
+      filter: brightness(1.28);
+      transform: translateY(-2px);
+    }
+
+    .launch-btn:active, .launch-btn.pressed {
+      transform: translateY(4px);
+      box-shadow: 
+        0 1px 0 #000000,
+        0 0 35px currentColor,
+        inset 0 0 20px currentColor !important;
+    }
+
+    .launch-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       COUNTDOWN STATE
+       Huge number (5,4,3,2,1) in Google colors with scale-pop animation
+       ========================================================================== */
+    .countdown-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 120px;
+      margin-bottom: 20px;
+    }
+
+    .countdown-section.active {
+      display: flex;
+    }
+
+    .countdown-number {
+      font-family: var(--font-pixel);
+      font-size: 82px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      will-change: transform, opacity;
+      margin-bottom: 14px;
+    }
+
+    .countdown-number.pop {
+      animation: countPop 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+    }
+
+    @keyframes countPop {
+      0% {
+        transform: scale(1.65);
+        opacity: 0;
+      }
+      65% {
+        transform: scale(0.92);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Countdown Colors */
+    .count-blue   { color: var(--google-blue);   text-shadow: 0 0 45px rgba(66, 133, 244, 0.9); }
+    .count-red    { color: var(--google-red);    text-shadow: 0 0 45px rgba(234, 67, 53, 0.9); }
+    .count-yellow { color: var(--google-yellow); text-shadow: 0 0 45px rgba(251, 188, 4, 0.9); }
+    .count-green  { color: var(--google-green);  text-shadow: 0 0 45px rgba(15, 157, 88, 0.9); }
+
+    /* Thin Progress Bar under Countdown */
+    .progress-bar-track {
+      width: 100%;
+      max-width: 380px;
+      height: 5px;
+      background: #1c2230;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--google-blue), var(--google-red), var(--google-yellow), var(--google-green));
+      box-shadow: 0 0 10px rgba(66, 133, 244, 0.8);
+      transition: width 0.1s linear;
+    }
+
+    /* ==========================================================================
+       "WE ARE LIVE!" GLITCH EFFECT AT 0
+       ========================================================================== */
+    .live-banner {
+      display: none;
+      font-family: var(--font-pixel);
+      font-size: 32px;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .live-banner.active {
+      display: block;
+      animation: liveGlitch 0.3s infinite alternate;
+    }
+
+    @keyframes liveGlitch {
+      0% {
+        text-shadow: 
+          2px 0 var(--google-red), 
+          -2px 0 var(--google-blue), 
+          0 0 25px rgba(255, 255, 255, 0.8);
+        transform: translate(0, 0);
+      }
+      50% {
+        text-shadow: 
+          -2px -1px var(--google-yellow), 
+          2px 1px var(--google-green), 
+          0 0 35px rgba(255, 255, 255, 1);
+        transform: translate(-1px, 1px);
+      }
+      100% {
+        text-shadow: 
+          2px 1px var(--google-blue), 
+          -2px -1px var(--google-red), 
+          0 0 40px rgba(66, 133, 244, 0.9);
+        transform: translate(1px, -1px);
+      }
+    }
+
+    /* Fallback Link If Redirect Does Not Occur */
+    .fallback-link {
+      display: none;
+      margin-top: 14px;
+      font-family: var(--font-pixel);
+      font-size: 11px;
+      color: var(--google-yellow);
+      text-decoration: underline;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      padding: 6px 12px;
+      border: 1px dashed var(--google-yellow);
+      border-radius: 4px;
+      background: rgba(251, 188, 4, 0.1);
+    }
+    .fallback-link:hover {
+      background: rgba(251, 188, 4, 0.25);
+    }
+
+    /* Footer & Controls Info */
+    .window-footer {
+      width: 100%;
+      border-top: 1px solid #1a202c;
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-credits {
+      font-family: var(--font-term);
+      font-size: 19px;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+    }
+
+    .shortcut-hints {
+      font-family: var(--font-term);
+      font-size: 16px;
+      color: #636b77;
+      letter-spacing: 0.08em;
+    }
+
+    .shortcut-key {
+      color: var(--text-muted);
+      border: 1px solid #323a48;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 14px;
+      background: #10131a;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE & ACCESSIBILITY (prefers-reduced-motion)
+       Optimized for 1920x1080 Projector
+       ========================================================================== */
+    @media (max-width: 640px) {
+      .retro-window {
+        max-width: 95vw;
+      }
+      .main-title {
+        font-size: 15px;
+      }
+      .subtitle {
+        font-size: 9px;
+      }
+      .launch-btn {
+        font-size: 16px;
+        padding: 15px 32px;
+      }
+      .countdown-number {
+        font-size: 64px;
+      }
+      .live-banner {
+        font-size: 24px;
+      }
+      .terminal-text {
+        font-size: 18px;
+      }
+      .footer-credits {
+        font-size: 16px;
+      }
+      .shortcut-hints {
+        display: none;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      /* Richer scale for 1080p and 4K presentations */
+      .retro-window {
+        max-width: 740px;
+      }
+      .main-title {
+        font-size: 24px;
+      }
+      .subtitle {
+        font-size: 13px;
+      }
+      .launch-btn {
+        font-size: 24px;
+        padding: 22px 56px;
+      }
+      .countdown-number {
+        font-size: 104px;
+      }
+      .live-banner {
+        font-size: 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .logo-container {
+        animation: none;
+      }
+      .launch-btn {
+        animation: none;
+        border-color: var(--google-blue);
+        color: var(--google-blue);
+      }
+      .countdown-number.pop {
+        animation: none;
+      }
+      .live-banner.active {
+        animation: none;
+        color: var(--google-green);
+        text-shadow: 0 0 20px var(--google-green);
+      }
+      .crt-overlay {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Cursor Grid Canvas -->
+  <div id="grid-container">
+    <canvas id="grid-canvas"></canvas>
+  </div>
+
+  <!-- Scanlines & CRT Vignette -->
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <!-- Confetti Canvas for Live Burst -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- Flash Screen Wipe Overlay -->
+  <div id="flash-wipe" aria-hidden="true"></div>
+
+  <!-- Central Retro Desktop Window -->
+  <main class="viewport-center" role="main">
+    <div class="retro-window" id="launch-window" role="region" aria-label="GDG Launch Terminal Window">
+      
+      <!-- Retro Title Bar -->
+      <header class="title-bar">
+        <div class="title-bar-left">
+          <div class="title-bar-icon" aria-hidden="true"></div>
+          <span>GDG_LAUNCH.exe</span>
+        </div>
+        <div class="window-controls" aria-hidden="true">
+          <div class="control-box ctrl-blue" title="Minimize"></div>
+          <div class="control-box ctrl-yellow" title="Maximize"></div>
+          <div class="control-box ctrl-red" title="Close"></div>
+        </div>
+      </header>
+
+      <!-- Window Content Body -->
+      <section class="window-body">
+        
+        <!-- Large GDG Logo (Inline SVG) -->
+        <div class="logo-container" id="gdg-logo-wrapper" aria-label="Google Developer Groups Logo">
+          <svg class="logo-svg" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GDG <> bracket logo">
+            <!-- Left Bracket < -->
+            <!-- Red Top Arm -->
+            <line x1="194" y1="170" x2="42" y2="256" stroke="#EA4335" stroke-width="52" stroke-linecap="round" />
+            <!-- Blue Bottom Arm -->
+            <line x1="42" y1="256" x2="194" y2="342" stroke="#4285F4" stroke-width="52" stroke-linecap="round" />
+            
+            <!-- Right Bracket > -->
+            <!-- Yellow Bottom Arm -->
+            <line x1="318" y1="342" x2="470" y2="256" stroke="#FBBC04" stroke-width="52" stroke-linecap="round" />
+            <!-- Green Top Arm -->
+            <line x1="318" y1="170" x2="470" y2="256" stroke="#0F9D58" stroke-width="52" stroke-linecap="round" />
+          </svg>
+        </div>
+
+        <!-- Title & Subtitle -->
+        <h1 class="main-title">GDG on Campus REC</h1>
+        <div class="subtitle-wrapper">
+          <span class="subtitle">Website Launch</span>
+          <span class="campus-badge">// Rajalakshmi Engineering College</span>
+        </div>
+
+        <!-- Terminal Prompt Line -->
+        <div class="terminal-box" aria-live="polite">
+          <span class="terminal-text" id="terminal-output">&gt; awaiting chief guest...</span>
+          <span class="terminal-cursor" aria-hidden="true"></span>
+        </div>
+
+        <!-- Interactive Launch Button Area -->
+        <div class="btn-container" id="btn-container">
+          <button type="button" class="launch-btn" id="launch-button" aria-label="Launch the GDG on Campus REC Website">
+            LAUNCH
+          </button>
+        </div>
+
+        <!-- Countdown Display (Replaces Button during Launch) -->
+        <div class="countdown-section" id="countdown-section" aria-live="assertive">
+          <div class="countdown-number" id="countdown-number">5</div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- "WE ARE LIVE!" Announcement -->
+        <div class="live-banner" id="live-banner" aria-live="assertive">
+          WE ARE LIVE!
+        </div>
+
+        <!-- Fallback Link (Appears 3s after countdown if redirect hasn't occurred) -->
+        <a href="https://www.gdgrec.dev/" class="fallback-link" id="fallback-link">
+          Continue to site &rarr;
+        </a>
+
+        <!-- Footer -->
+        <footer class="window-footer">
+          <p class="footer-credits">Google Developer Groups · REC · 2026</p>
+          <p class="shortcut-hints">
+            <span class="shortcut-key">SPACE</span> or <span class="shortcut-key">ENTER</span> Launch &nbsp;·&nbsp;
+            <span class="shortcut-key">F</span> Fullscreen &nbsp;·&nbsp;
+            <span class="shortcut-key">R</span> Reset
+          </p>
+        </footer>
+
+      </section>
+    </div>
+  </main>
+
+  <script>
+    /**
+     * ========================================================================
+     * CONFIGURATION CONSTANTS
+     * ========================================================================
+     */
+    const REDIRECT_URL = "https://www.gdgrec.dev/";
+    const COUNTDOWN_SECONDS = 5;
+
+    // CursorGrid component constants (exact port from React Bits specifications)
+    const CELL_SIZE = 70;
+    const RADIUS = 140;
+    const FALLOFF = "smooth";
+    const HOLD_TIME = 400;
+    const FADE_DURATION = 800;
+    const LINE_WIDTH = 1.2;
+    const MAX_OPACITY = 1;
+    const FILL_OPACITY = 0;
+    const GRID_OPACITY = 0.05;
+    const CELL_RADIUS = 0;
+    const CLICK_PULSE = true;
+    const PULSE_SPEED = 600;
+
+    // Google Logo Color Palette (Blue, Red, Yellow, Green)
+    const PALETTE = [
+      [66, 133, 244], // #4285F4 (Blue)
+      [234, 67, 53],  // #EA4335 (Red)
+      [251, 188, 4],  // #FBBC04 (Yellow)
+      [15, 157, 88]   // #0F9D58 (Green)
+    ];
+
+    const COUNTDOWN_COLORS = [
+      { name: "blue",   hex: "#4285F4", class: "count-blue",   freq: 523.25 }, // 5: Blue (C5)
+      { name: "red",    hex: "#EA4335", class: "count-red",    freq: 659.25 }, // 4: Red (E5)
+      { name: "yellow", hex: "#FBBC04", class: "count-yellow", freq: 783.99 }, // 3: Yellow (G5)
+      { name: "green",  hex: "#0F9D58", class: "count-green",  freq: 987.77 }, // 2: Green (B5)
+      { name: "blue",   hex: "#4285F4", class: "count-blue",   freq: 1174.66 } // 1: Blue (D6)
+    ];
+
+    /**
+     * ========================================================================
+     * CURSOR GRID IMPLEMENTATION (Vanilla JS Port of React Bits CursorGrid)
+     * Keeps the exact canvas algorithm, per-cell arrays, falloff curves,
+     * hold/fade, click pulse ring, ResizeObserver, and rAF idle sleep.
+     * ========================================================================
+     */
+    const FALLOFF_CURVES = {
+      linear: t => t,
+      smooth: t => t * t * (3 - 2 * t),
+      sharp: t => t * t * t
+    };
+
+    const container = document.getElementById('grid-container');
+    const canvas = document.getElementById('grid-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    let cols = 0;
+    let rows = 0;
+    let offX = 0;
+    let offY = 0;
+    let alphas = new Float32Array(0);
+    let touched = new Float64Array(0);
+    let w = 0;
+    let h = 0;
+    const pulses = [];
+    let raf = 0;
+    let running = false;
+    let lastFrame = 0;
+
+    const rebuildGrid = () => {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = Math.max(1, Math.round(w * dpr));
+      canvas.height = Math.max(1, Math.round(h * dpr));
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cols = Math.ceil(w / CELL_SIZE) + 1;
+      rows = Math.ceil(h / CELL_SIZE) + 1;
+      // Center the lattice so edge cells crop evenly on both sides
+      offX = (w - cols * CELL_SIZE) / 2;
+      offY = (h - rows * CELL_SIZE) / 2;
+      alphas = new Float32Array(cols * rows);
+      touched = new Float64Array(cols * rows);
+    };
+
+    const cellCenter = i => {
+      const cx = offX + (i % cols) * CELL_SIZE + CELL_SIZE / 2;
+      const cy = offY + Math.floor(i / cols) * CELL_SIZE + CELL_SIZE / 2;
+      return [cx, cy];
+    };
+
+    // Light up every cell whose center falls inside the radius
+    const energize = (x, y, boost) => {
+      const r = Math.max(RADIUS, 1);
+      const ease = FALLOFF_CURVES[FALLOFF] ?? FALLOFF_CURVES.linear;
+      const now = performance.now();
+      const minCol = Math.max(0, Math.floor((x - r - offX) / CELL_SIZE));
+      const maxCol = Math.min(cols - 1, Math.floor((x + r - offX) / CELL_SIZE));
+      const minRow = Math.max(0, Math.floor((y - r - offY) / CELL_SIZE));
+      const maxRow = Math.min(rows - 1, Math.floor((y + r - offY) / CELL_SIZE));
+
+      for (let cRow = minRow; cRow <= maxRow; cRow++) {
+        for (let cCol = minCol; cCol <= maxCol; cCol++) {
+          const i = cRow * cols + cCol;
+          const [cx, cy] = cellCenter(i);
+          const dist = Math.hypot(cx - x, cy - y);
+          if (dist > r) continue;
+          const level = ease(1 - dist / r) * MAX_OPACITY * (boost ?? 1);
+          if (level > alphas[i]) {
+            alphas[i] = level;
+            touched[i] = now;
+          } else if (level > 0) {
+            touched[i] = now;
+          }
+        }
+      }
+    };
+
+    const drawGrid = now => {
+      const dt = Math.min(now - lastFrame, 50);
+      lastFrame = now;
+      ctx.clearRect(0, 0, w, h);
+
+      // Faint static lattice
+      if (GRID_OPACITY > 0) {
+        ctx.strokeStyle = `rgba(255, 255, 255, ${GRID_OPACITY})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let cCol = 0; cCol <= cols; cCol++) {
+          const x = Math.round(offX + cCol * CELL_SIZE) + 0.5;
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, h);
+        }
+        for (let cRow = 0; cRow <= rows; cRow++) {
+          const y = Math.round(offY + cRow * CELL_SIZE) + 0.5;
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+        }
+        ctx.stroke();
+      }
+
+      // Expanding click pulses hand their energy to cells as they pass
+      for (let pi = pulses.length - 1; pi >= 0; pi--) {
+        const pulse = pulses[pi];
+        const age = (now - pulse.t0) / 1000;
+        const ringR = age * PULSE_SPEED;
+        if (ringR > Math.hypot(w, h)) {
+          pulses.splice(pi, 1);
+          continue;
+        }
+        const band = CELL_SIZE;
+        const minCol = Math.max(0, Math.floor((pulse.x - ringR - band - offX) / CELL_SIZE));
+        const maxCol = Math.min(cols - 1, Math.floor((pulse.x + ringR + band - offX) / CELL_SIZE));
+        const minRow = Math.max(0, Math.floor((pulse.y - ringR - band - offY) / CELL_SIZE));
+        const maxRow = Math.min(rows - 1, Math.floor((pulse.y + ringR + band - offY) / CELL_SIZE));
+        for (let cRow = minRow; cRow <= maxRow; cRow++) {
+          for (let cCol = minCol; cCol <= maxCol; cCol++) {
+            const i = cRow * cols + cCol;
+            const [cx, cy] = cellCenter(i);
+            const dist = Math.hypot(cx - pulse.x, cy - pulse.y);
+            if (Math.abs(dist - ringR) < band / 2 && MAX_OPACITY > alphas[i]) {
+              alphas[i] = MAX_OPACITY;
+              touched[i] = now;
+            }
+          }
+        }
+      }
+
+      let anyVisible = pulses.length > 0;
+      const fadeStep = dt / Math.max(FADE_DURATION, 16);
+      const half = CELL_SIZE / 2;
+
+      for (let i = 0; i < alphas.length; i++) {
+        let a = alphas[i];
+        if (a <= 0) continue;
+        if (now - touched[i] > HOLD_TIME) {
+          a = Math.max(0, a - fadeStep);
+          alphas[i] = a;
+          if (a <= 0) continue;
+        }
+        anyVisible = true;
+
+        const cCol = i % cols;
+        const cRow = Math.floor(i / cols);
+        // Multi-color Google palette chosen by stable diagonal pattern (col + row) % 4
+        const [cr, cg, cb] = PALETTE[(cCol + cRow) % 4];
+
+        const [cx, cy] = cellCenter(i);
+        const gradient = ctx.createRadialGradient(cx, cy, half * 0.1, cx, cy, CELL_SIZE);
+        gradient.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${a})`);
+        gradient.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
+
+        const x = cx - half + 0.5;
+        const y = cy - half + 0.5;
+        const s = CELL_SIZE - 1;
+
+        ctx.beginPath();
+        if (CELL_RADIUS > 0) {
+          ctx.roundRect(x, y, s, s, CELL_RADIUS);
+        } else {
+          ctx.rect(x, y, s, s);
+        }
+        if (FILL_OPACITY > 0) {
+          ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${a * FILL_OPACITY})`;
+          ctx.fill();
+        }
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = LINE_WIDTH;
+        ctx.stroke();
+      }
+
+      if (anyVisible) {
+        raf = requestAnimationFrame(drawGrid);
+      } else {
+        running = false;
+        if (GRID_OPACITY <= 0) ctx.clearRect(0, 0, w, h);
+      }
+    };
+
+    const wake = () => {
+      if (running) return;
+      running = true;
+      lastFrame = performance.now();
+      raf = requestAnimationFrame(drawGrid);
+    };
+
+    // Trigger an expanding pulse ring from coordinates (x, y)
+    const triggerGridPulse = (x, y) => {
+      pulses.push({ x, y, t0: performance.now() });
+      wake();
+    };
+
+    // Listen on the entire window so CursorGrid works smoothly over the UI
+    window.addEventListener('pointermove', e => {
+      energize(e.clientX, e.clientY);
+      wake();
+    });
+
+    window.addEventListener('pointerdown', e => {
+      if (!CLICK_PULSE) return;
+      // Do not trigger background click pulse if clicking the launch button directly
+      // (The button handler creates its own calibrated pulse)
+      if (e.target && e.target.id === 'launch-button') return;
+      triggerGridPulse(e.clientX, e.clientY);
+    });
+
+    const ro = new ResizeObserver(() => {
+      rebuildGrid();
+      wake();
+    });
+    ro.observe(document.body);
+    rebuildGrid();
+    wake();
+
+    /**
+     * ========================================================================
+     * WEB AUDIO SYNTHESIZER (No external audio files needed)
+     * Crisp retro arcade oscillator beeps and fanfare chords
+     * ========================================================================
+     */
+    let audioCtx = null;
+    const getAudioContext = () => {
+      if (!audioCtx) {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+          audioCtx = new AudioCtxClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    };
+
+    // Plays a retro square/triangle arcade beep
+    const playBeep = (freq = 520, duration = 0.12, type = 'square', vol = 0.18) => {
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        
+        gain.gain.setValueAtTime(vol, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        console.warn('Audio synthesis notice:', e);
+      }
+    };
+
+    // Triumphant 4-tone victory arpeggio on launch complete
+    const playSuccessChime = () => {
+      const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+      chords.forEach((freq, idx) => {
+        setTimeout(() => {
+          playBeep(freq, 0.28, 'triangle', 0.22);
+          playBeep(freq, 0.22, 'square', 0.12);
+        }, idx * 80);
+      });
+    };
+
+    /**
+     * ========================================================================
+     * PIXEL CONFETTI CANVAS SYSTEM (Four Google Colors)
+     * ========================================================================
+     */
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiRaf = 0;
+
+    const resizeConfetti = () => {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resizeConfetti);
+    resizeConfetti();
+
+    const spawnConfettiBurst = (originX, originY) => {
+      const colors = ['#4285F4', '#EA4335', '#FBBC04', '#0F9D58'];
+      const count = 160;
+      confettiParticles = [];
+
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 4 + Math.random() * 14;
+        confettiParticles.push({
+          x: originX,
+          y: originY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 5,
+          color: colors[i % colors.length],
+          size: 6 + Math.random() * 8,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12,
+          opacity: 1,
+          gravity: 0.28,
+          drag: 0.982
+        });
+      }
+
+      cancelAnimationFrame(confettiRaf);
+      const renderConfetti = () => {
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        let alive = false;
+
+        for (let i = 0; i < confettiParticles.length; i++) {
+          const p = confettiParticles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.vx *= p.drag;
+          p.rotation += p.rotSpeed;
+          p.opacity -= 0.007;
+
+          if (p.opacity > 0 && p.y < confettiCanvas.height + 20) {
+            alive = true;
+            confettiCtx.save();
+            confettiCtx.translate(p.x, p.y);
+            confettiCtx.rotate((p.rotation * Math.PI) / 180);
+            confettiCtx.globalAlpha = Math.max(0, p.opacity);
+            confettiCtx.fillStyle = p.color;
+            // Draw retro square pixel flakes
+            confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            confettiCtx.restore();
+          }
+        }
+
+        if (alive) {
+          confettiRaf = requestAnimationFrame(renderConfetti);
+        } else {
+          confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        }
+      };
+
+      confettiRaf = requestAnimationFrame(renderConfetti);
+    };
+
+    /**
+     * ========================================================================
+     * TERMINAL TYPING ANIMATION
+     * ========================================================================
+     */
+    const terminalOutput = document.getElementById('terminal-output');
+    let typingTimeout = null;
+
+    const typeTerminalMessage = (text, callback) => {
+      clearTimeout(typingTimeout);
+      terminalOutput.textContent = '';
+      let index = 0;
+
+      const typeNextChar = () => {
+        if (index < text.length) {
+          terminalOutput.textContent += text.charAt(index);
+          index++;
+          typingTimeout = setTimeout(typeNextChar, 34 + Math.random() * 24);
+        } else if (callback) {
+          callback();
+        }
+      };
+
+      typeNextChar();
+    };
+
+    /**
+     * ========================================================================
+     * LAUNCH SEQUENCE CONTROLLER
+     * 1. Idle -> 2. Pressed -> 3. 5s Countdown -> 4. Live Glitch & Confetti -> 5. Redirect
+     * ========================================================================
+     */
+    const launchButton = document.getElementById('launch-button');
+    const btnContainer = document.getElementById('btn-container');
+    const countdownSection = document.getElementById('countdown-section');
+    const countdownNumber = document.getElementById('countdown-number');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const liveBanner = document.getElementById('live-banner');
+    const fallbackLink = document.getElementById('fallback-link');
+    const flashWipe = document.getElementById('flash-wipe');
+
+    let isLaunching = false;
+    let countdownTimer = null;
+    let countdownStartTime = 0;
+    let fallbackTimeout = null;
+
+    const startLaunchSequence = () => {
+      // Guard against double clicks
+      if (isLaunching) return;
+      isLaunching = true;
+      launchButton.disabled = true;
+      launchButton.classList.add('pressed');
+
+      // Ensure audio context is unlocked
+      getAudioContext();
+
+      // Find center of launch button for concentric pulse rings
+      const rect = launchButton.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+
+      // Fire initial huge pulse from button center
+      triggerGridPulse(originX, originY);
+      playBeep(440, 0.14, 'square', 0.22);
+
+      // Hide launch button, show countdown section
+      setTimeout(() => {
+        btnContainer.style.display = 'none';
+        countdownSection.classList.add('active');
+        liveBanner.classList.remove('active');
+        fallbackLink.style.display = 'none';
+
+        // Begin 5-second countdown
+        let currentSecond = COUNTDOWN_SECONDS;
+        countdownStartTime = performance.now();
+
+        const updateTick = () => {
+          if (!isLaunching) return;
+
+          if (currentSecond > 0) {
+            const colorIdx = COUNTDOWN_SECONDS - currentSecond;
+            const stepConfig = COUNTDOWN_COLORS[colorIdx];
+
+            // Render Number with color and scale-pop animation
+            countdownNumber.textContent = currentSecond;
+            countdownNumber.className = 'countdown-number pop ' + stepConfig.class;
+            
+            // Re-trigger animation cleanly
+            void countdownNumber.offsetWidth;
+
+            // Audio beep for this tick
+            playBeep(stepConfig.freq, 0.13, 'square', 0.22);
+
+            // Update terminal status line
+            terminalOutput.textContent = `> launching in ${currentSecond}...`;
+
+            // Fire pulse on grid every second from the center
+            triggerGridPulse(originX, originY);
+
+            // Progress bar smooth update
+            const progressPct = ((COUNTDOWN_SECONDS - currentSecond + 1) / COUNTDOWN_SECONDS) * 100;
+            progressBarFill.style.width = progressPct + '%';
+
+            currentSecond--;
+            countdownTimer = setTimeout(updateTick, 1000);
+          } else {
+            // COUNTDOWN AT 0: "WE ARE LIVE!"
+            handleLaunchZero(originX, originY);
+          }
+        };
+
+        updateTick();
+      }, 160);
+    };
+
+    const handleLaunchZero = (originX, originY) => {
+      // Hide countdown number & progress bar
+      countdownSection.classList.remove('active');
+      
+      // Show Glitch Banner
+      liveBanner.classList.add('active');
+      terminalOutput.textContent = `> SYSTEM LIVE // REDIRECTING...`;
+
+      // Play victory fanfare
+      playSuccessChime();
+
+      // Fire burst of pixel confetti & concentric grid pulses
+      spawnConfettiBurst(originX, originY);
+      triggerGridPulse(originX, originY);
+      setTimeout(() => triggerGridPulse(originX, originY), 250);
+      setTimeout(() => triggerGridPulse(originX, originY), 500);
+
+      // Set fallback link timer: if redirect fails after 3s, show manual link
+      clearTimeout(fallbackTimeout);
+      fallbackTimeout = setTimeout(() => {
+        fallbackLink.style.display = 'inline-block';
+      }, 3000);
+
+      // After about 1 second, trigger flash wipe and redirect to official URL
+      setTimeout(() => {
+        flashWipe.classList.add('active');
+
+        setTimeout(() => {
+          try {
+            window.location.replace(REDIRECT_URL);
+          } catch (e) {
+            window.location.href = REDIRECT_URL;
+          }
+        }, 320);
+      }, 1000);
+    };
+
+    /**
+     * ========================================================================
+     * RESET TO IDLE (For Rehearsal / Testing via 'R' key)
+     * ========================================================================
+     */
+    const resetToIdle = () => {
+      isLaunching = false;
+      clearTimeout(countdownTimer);
+      clearTimeout(fallbackTimeout);
+      clearTimeout(typingTimeout);
+
+      // Reset button
+      launchButton.disabled = false;
+      launchButton.classList.remove('pressed');
+      btnContainer.style.display = 'flex';
+
+      // Reset countdown & live state
+      countdownSection.classList.remove('active');
+      liveBanner.classList.remove('active');
+      fallbackLink.style.display = 'none';
+      flashWipe.classList.remove('active');
+      progressBarFill.style.width = '0%';
+      countdownNumber.textContent = '5';
+      countdownNumber.className = 'countdown-number';
+
+      // Clear confetti
+      confettiParticles = [];
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+      // Restart terminal typing
+      typeTerminalMessage('> awaiting chief guest...');
+    };
+
+    /**
+     * ========================================================================
+     * KEYBOARD SHORTCUTS & EVENT LISTENERS
+     * - Space / Enter: Trigger Launch
+     * - F: Toggle Fullscreen
+     * - R: Reset for rehearsal
+     * ========================================================================
+     */
+    launchButton.addEventListener('click', startLaunchSequence);
+
+    window.addEventListener('keydown', e => {
+      // Space or Enter triggers launch if not already launched
+      if ((e.code === 'Space' || e.key === 'Enter') && !isLaunching) {
+        e.preventDefault();
+        startLaunchSequence();
+      }
+
+      // 'F' key toggles Fullscreen for projector presentation
+      if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      // 'R' key resets to idle for rehearsal
+      if (e.key === 'r' || e.key === 'R') {
+        resetToIdle();
+      }
+    });
+
+    // Initial terminal typing on page ready
+    window.addEventListener('DOMContentLoaded', () => {
+      typeTerminalMessage('> awaiting chief guest...');
+    });
+  </script>
+</body>
+</html>
